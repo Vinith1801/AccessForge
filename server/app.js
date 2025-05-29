@@ -6,10 +6,16 @@ dotenv.config();
 
 const app = express();
 
+// Middleware
 app.use(cors());
-app.use(express.json()); // Parse JSON bodies
+app.use(express.json());
 
-// Routes will be added here later
-app.get("/", (req, res) => res.send("AccessForge API is running") );
+// Routes
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/roles", require("./routes/roleRoutes"));
+app.use("/api/permissions", require("./routes/permissionRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
+
+app.get("/", (req, res) => res.send("AccessForge API is running"));
 
 module.exports = app;
