@@ -68,24 +68,24 @@ exports.deleteUser = async (req, res) => {
 
 // Assign role to user
 exports.assignRole = async (req, res) => {
-  const { roleId } = req.body;
+  const { userId, roleId } = req.body;
 
   try {
     if (!req.hasPermission("manage_roles")) {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(userId);
     const role = await Role.findById(roleId);
 
     if (!user || !role) {
       return res.status(404).json({ message: "User or Role not found" });
     }
 
-    user.role = role._id;
+    user.role = roleId;
     await user.save();
 
-    res.json({ message: `Role assigned to user ${user.name}`, user });
+    res.json({message: `Role '${role.name}' assigned to ${user.name}` });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }

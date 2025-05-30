@@ -20,5 +20,6 @@ router.get("/:id", getUserById); // view_self logic inside
 router.put("/:id", updateUser);  // update_self logic inside
 router.delete("/:id", authorizePermission("delete_user"), deleteUser);
 router.put("/:id/role", authorizePermission("manage_roles"), assignRole);
+router.put("/assign-role", authorizePermission("manage_roles"), assignRole);
 
 module.exports = router;
