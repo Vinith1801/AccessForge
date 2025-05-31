@@ -1,15 +1,26 @@
-import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Register from "./pages/Auth/Register";
+import Login from "./pages/Auth/Login";
+import AdminHome from "./pages/Dashboard/AdminHome";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-        <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
-    </>
-  )
-}
+    <Router>
+      <Routes>
+        <Route path="/" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <AdminHome />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </Router>
+  );
+};
 
-export default App
+export default App;
