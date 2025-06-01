@@ -1,7 +1,15 @@
 const AdminHome = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-green-100">
-      <h1 className="text-3xl font-bold">Welcome to the Admin Dashboard 🎉</h1>
+    <div>
+      <h3 className="text-xl font-bold mb-4">Admin Dashboard</h3>
+      <p>Use the sidebar to manage users, roles, and permissions.</p>
+      <a href="/register" className="text-blue-600 underline">
+            Register
+      </a>
+      <br />
+      <a href="/login" className="text-blue-600 underline">
+            Login here
+      </a>
     </div>
   );
 };
