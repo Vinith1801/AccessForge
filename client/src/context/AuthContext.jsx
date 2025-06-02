@@ -1,26 +1,30 @@
 import { createContext, useContext, useState } from "react";
+import {jwtDecode} from "jwt-decode"; // make sure this is a default import
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // null until login
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(() => {
+    const token = localStorage.getItem("token");
+    return token ? jwtDecode(token) : null;
+  });
 
-  const login = (mockUser) => {
-    setUser(mockUser);
-    setIsAuthenticated(true);
+  const login = (token) => {
+    localStorage.setItem("token", token);
+    setUser(jwtDecode(token));
   };
 
   const logout = () => {
+    localStorage.removeItem("token");
     setUser(null);
-    setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
+// Custom hook (optional but clean)
 export const useAuthContext = () => useContext(AuthContext);

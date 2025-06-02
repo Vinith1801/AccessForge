@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
 import AdminHome from "./pages/Dashboard/AdminHome";
@@ -12,9 +12,10 @@ const App = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-            <Route
+        <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
@@ -24,8 +25,8 @@ const App = () => {
         >
           <Route index element={<AdminHome />} />
           <Route path="users" element={<UsersPage />} />
-        <Route path="roles" element={<RolesPage />} />
-        <Route path="permissions" element={<PermissionsPage />} />
+          <Route path="roles" element={<RolesPage />} />
+          <Route path="permissions" element={<PermissionsPage />} />
         </Route>
       </Routes>
     </Router>

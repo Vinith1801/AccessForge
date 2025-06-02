@@ -1,71 +1,43 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "../../context/AuthContext";
+import { useState, useContext } from 'react';
+import API from '../../services/api';
+import { AuthContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
-  const { login } = useAuthContext();
+export default function Login() {
+  const [form, setForm] = useState({ email: '', password: '' });
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", password: "" });
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // You would call backend API here to validate
-    login({
-      name: "Sample User",
-      email: form.email,
-      roles: ["user"],
-      permissions: [],
-    });
-    navigate("/dashboard");
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded shadow-md w-full max-w-md"
-      >
-        <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
-
-        <input
-          type="email"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          placeholder="Email"
-          required
-          className="w-full mb-4 p-3 border rounded"
-        />
-
-        <input
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          placeholder="Password"
-          required
-          className="w-full mb-6 p-3 border rounded"
-        />
-
-        <button
-          type="submit"
-          className="w-full bg-gray-900 text-white py-2 rounded hover:bg-gray-800"
-        >
-          Login
-        </button>
-
-        <p className="text-center text-sm mt-4">
-          Don’t have an account?{" "}
-          <a href="/register" className="text-blue-600 underline">
-            Register
-          </a>
-        </p>
-      </form>
-    </div>
-  );
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    console.log("Submitting login with:", form); // ✅ Add this line
+    const res = await API.post('/auth/login', form);
+    login(res.data.token);
+    navigate('/dashboard');
+  } catch (err) {
+    console.error("Login error:", err.response?.data || err.message); // ✅ Add this line
+    alert(err.response?.data?.message || 'Login failed');
+  }
 };
 
-export default Login;
+
+  return (
+    <div>
+      <h2>Login</h2>
+      <p>Welcome back! Please login to your account.</p>
+          <form onSubmit={handleSubmit}>
+      <input name="email" type="email" onChange={handleChange} required />
+      <input name="password" type="password" onChange={handleChange} required />
+      <button type="submit">Login</button>
+    </form>
+      <p>
+        Don't have an account? <a href="/register">Register</a>
+      </p>
+    </div>
+  );
+}
