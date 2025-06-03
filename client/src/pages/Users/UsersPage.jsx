@@ -29,52 +29,57 @@ const UsersPage = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold">Users</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-medium text-gray-800">Users</h2>
         <button
           onClick={() => {
             setSelectedUser(null);
             setShowFormModal(true);
           }}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="text-sm text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-100 transition"
         >
           + Add User
         </button>
       </div>
 
-      <table className="w-full bg-white shadow border rounded">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="p-2 border">Name</th>
-            <th className="p-2 border">Email</th>
-            <th className="p-2 border">Role</th>
-            <th className="p-2 border">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {dummyUsers.map((user) => (
-            <tr key={user.id} className="text-center hover:bg-gray-50">
-              <td className="p-2 border">{user.name}</td>
-              <td className="p-2 border">{user.email}</td>
-              <td className="p-2 border">{user.role}</td>
-              <td className="p-2 border space-x-2">
-                <button
-                  onClick={() => handleEdit(user)}
-                  className="px-3 py-1 bg-yellow-500 text-white rounded text-sm"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(user)}
-                  className="px-3 py-1 bg-red-600 text-white rounded text-sm"
-                >
-                  Delete
-                </button>
-              </td>
+      <div className="overflow-x-auto">
+        <table className="min-w-full border border-gray-200 rounded-md table-auto text-sm">
+          <thead className="bg-gray-50 text-gray-600">
+            <tr>
+              <th className="px-4 py-3 border border-gray-200 text-left">Name</th>
+              <th className="px-4 py-3 border border-gray-200 text-left">Email</th>
+              <th className="px-4 py-3 border border-gray-200 text-left">Role</th>
+              <th className="px-4 py-3 border border-gray-200 text-center">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {dummyUsers.map((user) => (
+              <tr
+                key={user.id}
+                className="border-t border-gray-200 hover:bg-gray-50"
+              >
+                <td className="px-4 py-2">{user.name}</td>
+                <td className="px-4 py-2">{user.email}</td>
+                <td className="px-4 py-2">{user.role}</td>
+                <td className="px-4 py-2 text-center space-x-3">
+                  <button
+                    onClick={() => handleEdit(user)}
+                    className="text-yellow-600 hover:text-yellow-800 text-xs font-semibold focus:outline-none"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(user)}
+                    className="text-red-600 hover:text-red-800 text-xs font-semibold focus:outline-none"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <UserFormModal
         isOpen={showFormModal}

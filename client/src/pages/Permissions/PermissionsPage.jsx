@@ -11,38 +11,51 @@ const permissions = [
 
 const PermissionsPage = () => {
   const [showModal, setShowModal] = useState(false);
+
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-4">Permissions Management</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-medium mb-6 text-gray-800">
+          Permissions Management
+        </h2>
 
-      <div className="mb-4">
-        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          onClick={() => setShowModal(true)}
-        >
-          + Create Permission
-        </button>
-        <PermissionFormModal isOpen={showModal} onClose={() => setShowModal(false)} />
+        <div className="mb-6">
+          <button
+            onClick={() => setShowModal(true)}
+            className="text-sm text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-100 transition"
+          >
+            + Create Permission
+          </button>
       </div>
 
-      <div className="overflow-x-auto bg-white shadow rounded">
-        <table className="min-w-full table-auto border border-gray-200">
-          <thead className="bg-gray-100">
+        <PermissionFormModal
+          isOpen={showModal}
+          onClose={() => setShowModal(false)}
+        />
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="min-w-full border border-gray-200 rounded-md table-auto text-sm">
+          <thead className="bg-gray-50 text-gray-600">
             <tr>
-              <th className="px-4 py-2 border">#</th>
-              <th className="px-4 py-2 border">Permission Name</th>
-              <th className="px-4 py-2 border">Actions</th>
+              <th className="px-4 py-3 border border-gray-200 text-left">#</th>
+              <th className="px-4 py-3 border border-gray-200 text-left">Permission Name</th>
+              <th className="px-4 py-3 border border-gray-200 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
             {permissions.map((perm, idx) => (
-              <tr key={perm.id} className="text-center hover:bg-gray-50">
-                <td className="px-4 py-2 border">{idx + 1}</td>
-                <td className="px-4 py-2 border">{perm.name}</td>
-                <td className="px-4 py-2 border">
-                  <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded mr-2 text-sm">
+              <tr
+                key={perm.id}
+                className="border-t border-gray-200 hover:bg-gray-50"
+              >
+                <td className="px-4 py-2">{idx + 1}</td>
+                <td className="px-4 py-2">{perm.name}</td>
+                <td className="px-4 py-2 text-center space-x-3">
+                  <button className="text-yellow-600 hover:text-yellow-800 text-xs font-semibold focus:outline-none">
                     Edit
                   </button>
-                  <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+                  <button className="text-red-600 hover:text-red-800 text-xs font-semibold focus:outline-none">
                     Delete
                   </button>
                 </td>

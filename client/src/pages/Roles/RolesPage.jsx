@@ -1,4 +1,3 @@
-// src/pages/Dashboard/RolesPage.jsx
 import React, { useState } from "react";
 import RoleFormModal from "../../components/modals/RoleFormModal";
 import ConfirmDeleteModal from "../../components/modals/ConfirmDeleteModal";
@@ -38,66 +37,71 @@ const RolesPage = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold">Roles</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-medium text-gray-800">Roles</h2>
         <button
           onClick={() => {
             setSelectedRole(null);
             setShowFormModal(true);
           }}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="text-sm text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-100 transition"
         >
           + Add Role
         </button>
       </div>
 
-      <table className="w-full bg-white shadow border rounded">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="p-2 border">Name</th>
-            <th className="p-2 border">Permissions</th>
-            <th className="p-2 border">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {dummyRoles.map((role) => (
-            <tr key={role.id} className="text-center hover:bg-gray-50">
-              <td className="p-2 border">{role.name}</td>
-              <td className="p-2 border text-left">
-                {role.permissions.length > 0 ? (
-                  role.permissions.map((p, i) => (
-                    <span key={i} className="inline-block bg-gray-200 text-xs px-2 py-1 rounded m-1">
-                      {p}
-                    </span>
-                  ))
-                ) : (
-                  <span className="text-gray-400 italic">None</span>
-                )}
-              </td>
-              <td className="p-2 border space-x-2">
-                <button
-                  onClick={() => handleEdit(role)}
-                  className="px-3 py-1 bg-yellow-500 text-white rounded text-sm"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(role)}
-                  className="px-3 py-1 bg-red-600 text-white rounded text-sm"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => handleAssignPermissions(role)}
-                  className="px-3 py-1 bg-green-600 text-white rounded text-sm"
-                >
-                  Assign Permissions
-                </button>
-              </td>
+      <div className="overflow-x-auto">
+        <table className="min-w-full border-collapse border border-gray-200 text-sm">
+          <thead>
+            <tr className="bg-gray-50 text-gray-600">
+              <th className="border border-gray-200 px-4 py-2 text-left">Name</th>
+              <th className="border border-gray-200 px-4 py-2 text-left">Permissions</th>
+              <th className="border border-gray-200 px-4 py-2 text-center">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {dummyRoles.map((role) => (
+              <tr key={role.id} className="hover:bg-gray-50">
+                <td className="border border-gray-200 px-4 py-2">{role.name}</td>
+                <td className="border border-gray-200 px-4 py-2">
+                  {role.permissions.length > 0 ? (
+                    role.permissions.map((p, i) => (
+                      <span
+                        key={i}
+                        className="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded mr-1 mb-1"
+                      >
+                        {p}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="italic text-gray-400">None</span>
+                  )}
+                </td>
+                <td className="border border-gray-200 px-4 py-2 text-center space-x-2">
+                  <button
+                    onClick={() => handleEdit(role)}
+                    className="text-yellow-600 hover:text-yellow-800 text-xs"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(role)}
+                    className="text-red-600 hover:text-red-800 text-xs"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => handleAssignPermissions(role)}
+                    className="text-green-600 hover:text-green-800 text-xs"
+                  >
+                    Assign
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <RoleFormModal
         isOpen={showFormModal}
