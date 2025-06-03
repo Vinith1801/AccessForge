@@ -2,6 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
+// to post roles to the database
+// const seedRoles = require("./scripts/seedRoles");
+
 dotenv.config();
 
 const app = express();
@@ -23,5 +26,8 @@ app.use("/api/roles", require("./routes/roleRoutes"));
 
 
 app.get("/", (req, res) => res.send("AccessForge API is running"));
+
+// remove the comment to seed roles
+// seedRoles()
 
 module.exports = app;
