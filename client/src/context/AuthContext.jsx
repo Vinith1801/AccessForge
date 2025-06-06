@@ -1,30 +1,43 @@
-import { createContext, useContext, useState } from "react";
-import {jwtDecode} from "jwt-decode"; // make sure this is a default import
+import { createContext, useContext, useState, useEffect } from "react";
 
-export const AuthContext = createContext();
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const token = localStorage.getItem("token");
-    return token ? jwtDecode(token) : null;
-  });
+  const storedUser = localStorage.getItem("user");
+  try {
+    return storedUser ? JSON.parse(storedUser) : null;
+  } catch (err) {
+    console.error("Invalid user in localStorage");
+    return null;
+  }
+});
 
-  const login = (token) => {
-    localStorage.setItem("token", token);
-    setUser(jwtDecode(token));
-  };
+  const login = (userData) => {
+  localStorage.setItem("token", userData.token);
+  localStorage.setItem("user", JSON.stringify(userData));
+  setUser(userData);
+};
 
   const logout = () => {
-    localStorage.removeItem("token");
     setUser(null);
+    localStorage.clear();
   };
 
+  const updateUser = (updatedFields) => {
+  setUser((prevUser) => {
+    const updated = { ...prevUser, ...updatedFields };
+    localStorage.setItem("user", JSON.stringify(updated));
+    return updated;
+  });
+};
+
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser , login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Custom hook (optional but clean)
-export const useAuthContext = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext);
