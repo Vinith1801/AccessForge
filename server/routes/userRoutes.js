@@ -1,25 +1,27 @@
 const express = require("express");
 const router = express.Router();
-const { assignRole } = require("../controllers/userController");
-
-
 const {
   getAllUsers,
   getUserById,
-  updateUser,
-  deleteUser,
+  updateUserById,
+  updateSelf,
+  deleteUserById
 } = require("../controllers/userController");
 
 const { protect } = require("../middleware/authMiddleware");
-const { authorizePermission } = require("../middleware/authorize");
+const { allowRoles, preventEditorFromEditingAdmins } = require("../middleware/roleMiddleware");
 
-router.use(protect);
+router.get("/", protect, allowRoles("admin", "editor"), getAllUsers);
+router.get("/:id", protect, getUserById);
+router.put("/me", protect, updateSelf);
+router.put("/:id", protect, allowRoles("admin", "editor"), preventEditorFromEditingAdmins, updateUserById);
+router.delete(
+  "/:id",
+  protect,
+  allowRoles("admin", "editor"),
+  preventEditorFromEditingAdmins,
+  deleteUserById
+);
 
-router.get("/", authorizePermission("view_users"), getAllUsers);
-router.get("/:id", getUserById); // view_self logic inside
-router.put("/:id", updateUser);  // update_self logic inside
-router.delete("/:id", authorizePermission("delete_user"), deleteUser);
-router.put("/:id/role", authorizePermission("manage_roles"), assignRole);
-router.put("/assign-role", authorizePermission("manage_roles"), assignRole);
 
 module.exports = router;

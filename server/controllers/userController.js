@@ -1,92 +1,85 @@
 const User = require("../models/User");
 
-// Get all users
+// @desc    Get all users (admin/editor only)
+// @route   GET /api/users
+// @access  Admin, Editor
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().select("-password").populate("role");
+    const users = await User.find().select("-password");
     res.json(users);
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch users" });
   }
 };
 
-// Get user by ID
+// @desc    Get user by ID
+// @route   GET /api/users/:id
+// @access  Protected
 exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("-password").populate("role");
-    if (!user) return res.status(404).json({ message: "User not found" });
-
-    // Only allow self-view unless has view_users permission
-    if (
-      req.user._id.toString() !== req.params.id &&
-      !req.hasPermission("view_users")
-    ) {
-      return res.status(403).json({ message: "Access denied" });
-    }
-
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-// Update user
-exports.updateUser = async (req, res) => {
-  try {
-    // Only allow self-update unless has update_user permission
-    if (
-      req.user._id.toString() !== req.params.id &&
-      !req.hasPermission("update_user")
-    ) {
-      return res.status(403).json({ message: "Access denied" });
-    }
-
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }).select("-password");
+    const user = await User.findById(req.params.id).select("-password");
     if (!user) return res.status(404).json({ message: "User not found" });
 
     res.json(user);
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch user" });
   }
 };
 
-// Delete user
-exports.deleteUser = async (req, res) => {
+// @desc    Update another user (admin/editor)
+// @route   PUT /api/users/:id
+// @access  Admin, Editor
+exports.updateUserById = async (req, res) => {
   try {
-    if (!req.hasPermission("delete_user")) {
-      return res.status(403).json({ message: "Access denied" });
-    }
+    const { name, email, role } = req.body;
+    const user = await User.findById(req.params.id);
 
-    const user = await User.findByIdAndDelete(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    res.json({ message: "User deleted" });
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    user.name = name || user.name;
+    user.email = email || user.email;
+    if (role) user.role = role;
+
+    const updatedUser = await user.save();
+    res.json({ message: "User updated", user: updatedUser });
+  } catch (error) {
+    res.status(500).json({ message: "Update failed" });
   }
 };
 
-// Assign role to user
-exports.assignRole = async (req, res) => {
-  const { userId, roleId } = req.body;
-
+// @desc    Update self
+// @route   PUT /api/users/me
+// @access  User
+exports.updateSelf = async (req, res) => {
   try {
-    if (!req.hasPermission("manage_roles")) {
-      return res.status(403).json({ message: "Access denied" });
-    }
+    const { name, email, password } = req.body;
+    const user = await User.findById(req.user._id);
 
-    const user = await User.findById(userId);
-    const role = await Role.findById(roleId);
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    if (!user || !role) {
-      return res.status(404).json({ message: "User or Role not found" });
-    }
+    user.name = name || user.name;
+    user.email = email || user.email;
+    if (password) user.password = password;
 
-    user.role = roleId;
-    await user.save();
+    const updatedUser = await user.save();
+    res.json({ message: "Profile updated", user: updatedUser });
+  } catch (error) {
+    res.status(500).json({ message: "Update failed" });
+  }
+};
 
-    res.json({message: `Role '${role.name}' assigned to ${user.name}` });
-  } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
+// @desc    Delete a user
+// @route   DELETE /api/users/:id
+// @access  Admin, Editor (not for deleting admins if editor)
+exports.deleteUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user)
+      return res.status(404).json({ message: "User not found" });
+
+    await user.deleteOne();
+    res.json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Deletion failed", error });
   }
 };
