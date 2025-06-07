@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../api/axios";
+import { toast } from "react-hot-toast";
 
 const ProfileCard = ({ user, onUpdate }) => {
   const [name, setName] = useState(user.name);
@@ -8,38 +9,35 @@ const ProfileCard = ({ user, onUpdate }) => {
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setMessage("");
-  try {
-    const { data } = await api.put("/users/me", { name, email });  // ✅ Correct route
-    setMessage("Profile updated successfully!");
-    if (onUpdate) {
-  onUpdate(data.user);
-}
-
-  } catch (error) {
-    setMessage(
-      error.response?.data?.message || "Failed to update profile"
-    );
-    console.error("Error updating profile:", error);
-  } finally {
-    setLoading(false);
-  }
-};
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+    try {
+      const { data } = await api.put("/users/me", { name, email });
+      setMessage("Profile updated successfully!");
+      if (onUpdate) {
+        onUpdate(data.user);
+        toast.success("Profile updated successfully!");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to update profile");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="max-w-md p-6 bg-white rounded shadow mt-8">
-      <h2 className="text-xl font-semibold mb-4">Your Profile</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="max-w-md p-8 bg-white rounded-2xl shadow-lg mt-8 border border-gray-200">
+      <h2 className="text-2xl font-semibold mb-6 text-gray-900">Your Profile</h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block font-medium mb-1" htmlFor="name">
+          <label htmlFor="name" className="block font-medium text-gray-700 mb-2">
             Name
           </label>
           <input
             id="name"
             type="text"
-            className="w-full border p-2 rounded"
+            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
@@ -47,13 +45,13 @@ const ProfileCard = ({ user, onUpdate }) => {
         </div>
 
         <div>
-          <label className="block font-medium mb-1" htmlFor="email">
+          <label htmlFor="email" className="block font-medium text-gray-700 mb-2">
             Email
           </label>
           <input
             id="email"
             type="email"
-            className="w-full border p-2 rounded"
+            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -63,14 +61,14 @@ const ProfileCard = ({ user, onUpdate }) => {
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+          className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 disabled:opacity-60 transition"
         >
           {loading ? "Saving..." : "Save Changes"}
         </button>
       </form>
 
       {message && (
-        <p className="mt-3 text-sm text-green-600 dark:text-green-400">{message}</p>
+        <p className="mt-4 text-center text-green-600 font-medium">{message}</p>
       )}
     </div>
   );

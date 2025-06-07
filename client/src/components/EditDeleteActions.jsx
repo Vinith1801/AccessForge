@@ -1,4 +1,4 @@
-const EditDeleteActions = ({ currentUser, targetUser }) => {
+const EditDeleteActions = ({ currentUser, targetUser, onEdit, onDelete }) => {
   const isEditingSelf = currentUser._id === targetUser._id;
   const isTargetAdmin = targetUser.role === "admin";
 
@@ -11,12 +11,18 @@ const EditDeleteActions = ({ currentUser, targetUser }) => {
   return (
     <div className="flex gap-2">
       {canEdit && (
-        <button className="px-2 py-1 text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600">
+        <button
+          onClick={() => onEdit?.(targetUser)}
+          className="px-3 py-1 text-sm bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
+        >
           Edit
         </button>
       )}
       {canDelete && (
-        <button className="px-2 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600">
+        <button
+          onClick={() => onDelete?.(targetUser)}
+          className="px-3 py-1 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+        >
           Delete
         </button>
       )}

@@ -26,7 +26,7 @@ const UserManagement = ({ users, onRefresh }) => {
       setEditModalOpen(false);
       onRefresh();
     } catch (err) {
-        console.error("Error updating user:", err);
+      console.error("Error updating user:", err);
       alert("Edit failed");
     }
   };
@@ -43,43 +43,59 @@ const UserManagement = ({ users, onRefresh }) => {
 
   return (
     <div className="mt-6">
-      <h2 className="text-xl font-semibold">All Users</h2>
-      <table className="min-w-full bg-white border border-gray-200">
-           <tbody>
-        {users.map((u) => {
-          const isEditingAdmin = u.role === "admin";
-          const canEdit = !(currentUser.role === "editor" && isEditingAdmin);
-          const canDelete = !(currentUser.role === "editor" && isEditingAdmin);
-            return (
-            <tr key={u._id} className="border-t">
-                <td className="p-2">{u.name}</td>
-                <td className="p-2">{u.email}</td>
-                <td className="p-2">{u.role}</td>
-                <td className="p-2 space-x-2">
-                {canEdit && (
-                    <button onClick={() => handleEdit(u)} className="text-blue-500">
-                    Edit
-                    </button>
-                )}
-                {canDelete && (
-                    <button onClick={() => handleDelete(u)} className="text-red-500">
-                    Delete
-                    </button>
-                )}
-                </td>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-900">All Users</h2>
+      <div className="overflow-x-auto rounded-lg shadow-md border border-gray-200">
+        <table className="min-w-full bg-white divide-y divide-gray-200">
+          <thead className="bg-purple-100 text-purple-900 font-semibold">
+            <tr>
+              <th className="px-4 py-3 text-left">Name</th>
+              <th className="px-4 py-3 text-left">Email</th>
+              <th className="px-4 py-3 text-left">Role</th>
+              <th className="px-4 py-3 text-left">Actions</th>
             </tr>
-            );
-        })}
-        </tbody>
-      </table>
-   
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {users.map((u) => {
+              const isEditingAdmin = u.role === "admin";
+              const canEdit = !(currentUser.role === "editor" && isEditingAdmin);
+              const canDelete = !(currentUser.role === "editor" && isEditingAdmin);
+
+              return (
+                <tr key={u._id} className="hover:bg-purple-50 transition">
+                  <td className="px-4 py-3">{u.name}</td>
+                  <td className="px-4 py-3">{u.email}</td>
+                  <td className="px-4 py-3 capitalize">{u.role}</td>
+                  <td className="px-4 py-3 space-x-3">
+                    {canEdit && (
+                      <button
+                        onClick={() => handleEdit(u)}
+                        className="text-blue-600 hover:text-blue-800 font-semibold transition"
+                      >
+                        Edit
+                      </button>
+                    )}
+                    {canDelete && (
+                      <button
+                        onClick={() => handleDelete(u)}
+                        className="text-red-600 hover:text-red-800 font-semibold transition"
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
 
       {editModalOpen && (
         <UserFormModal
-        user={selectedUser}
-        currentUser={currentUser}
-        onClose={() => setEditModalOpen(false)}
-        onSubmit={submitEdit}
+          user={selectedUser}
+          currentUser={currentUser}
+          onClose={() => setEditModalOpen(false)}
+          onSubmit={submitEdit}
         />
       )}
 
