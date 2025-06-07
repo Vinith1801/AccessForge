@@ -21,76 +21,86 @@ const Dashboard = () => {
     if (user?.role !== "user") fetchUsers();
   }, []);
 
-  const handleUserUpdate = (updatedFields) => {
-  updatedUser(updatedFields);
-  };
-
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-2">Welcome, {user.name}</h1>
-      <p className="text-gray-600">Role: {user.role}</p>
-      <button
-        onClick={logout}
-        className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-      >
-        Logout
-      </button>
+    <div className="relative min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden p-6">
 
-      {/* Admin Panel */}
-      {user.role === "admin" && (
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold">Admin Panel</h2>
-          <p className="text-gray-600">Full access to manage users.</p>
+      {/* Abstract background shapes */}
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-animatePulse"></div>
+      <div className="absolute bottom-24 right-16 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-animatePulse animation-delay-1000"></div>
 
-          <UserTable users={users} />
-        </div>
-      )}
+      <div className="relative z-10 max-w-5xl mx-auto bg-white bg-opacity-90 backdrop-blur-md rounded-3xl p-8 shadow-xl space-y-8">
 
-      {/* Editor Panel */}
-      {user.role === "editor" && (
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold">Editor Panel</h2>
-          <p className="text-gray-600">You can view and edit users (except Admins).</p>
+        <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+          <div>
+            <h1 className="text-4xl font-extrabold text-gray-900">
+              Welcome, {user.name}
+            </h1>
+            <p className="text-gray-700 mt-1">Role: <span className="font-semibold">{user.role}</span></p>
+          </div>
 
-          <UserTable users={users} />
-        </div>
-      )}
+          <button
+            onClick={logout}
+            className="mt-4 sm:mt-0 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold shadow-md"
+          >
+            Logout
+          </button>
+        </header>
 
-      {/* User Panel */}
-      {user.role === "user" && (
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold">User Dashboard</h2>
-          <p className="text-gray-600">You can view and update your own profile.</p>
-        </div>
-      )}
+        {/* Panels */}
 
-      {/* Conditional rendering based on user role */}
-      {user.role === "admin" || user.role === "editor" ? (
-        <UserManagement users={users} currentUser={user} onRefresh={fetchUsers} />
-        ) : (
-        <ProfileCard user={user} onUpdate={updateUser} />
+        {(user.role === "admin" || user.role === "editor") && (
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-1">
+              {user.role === "admin" ? "Admin Panel" : "Editor Panel"}
+            </h2>
+            <p className="text-gray-600 mb-4">
+              {user.role === "admin"
+                ? "Full access to manage users."
+                : "You can view and edit users (except Admins)."}
+            </p>
+
+            <UserTable users={users} />
+            <div className="mt-6">
+              <UserManagement users={users} currentUser={user} onRefresh={fetchUsers} />
+            </div>
+          </section>
         )}
-        
 
+        {user.role === "user" && (
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-1">
+              User Dashboard
+            </h2>
+            <p className="text-gray-600 mb-6">
+              You can view and update your own profile.
+            </p>
+
+            <ProfileCard user={user} onUpdate={updateUser} />
+          </section>
+        )}
+      </div>
     </div>
   );
 };
 
 const UserTable = ({ users }) => (
-  <table className="mt-4 w-full border text-left text-sm">
-    <thead className="bg-gray-200">
+  <table className="w-full border-collapse border border-gray-200 text-left text-sm rounded-lg overflow-hidden shadow-sm">
+    <thead className="bg-purple-100 text-purple-900 font-semibold">
       <tr>
-        <th className="p-2">Name</th>
-        <th className="p-2">Email</th>
-        <th className="p-2">Role</th>
+        <th className="p-3 border-b border-gray-300">Name</th>
+        <th className="p-3 border-b border-gray-300">Email</th>
+        <th className="p-3 border-b border-gray-300">Role</th>
       </tr>
     </thead>
     <tbody>
       {users.map((u) => (
-        <tr key={u._id} className="border-t hover:bg-gray-50">
-          <td className="p-2">{u.name}</td>
-          <td className="p-2">{u.email}</td>
-          <td className="p-2">{u.role}</td>
+        <tr
+          key={u._id}
+          className="border-b border-gray-200 hover:bg-purple-50 transition"
+        >
+          <td className="p-3">{u.name}</td>
+          <td className="p-3">{u.email}</td>
+          <td className="p-3 capitalize">{u.role}</td>
         </tr>
       ))}
     </tbody>

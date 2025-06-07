@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -19,21 +20,28 @@ const Register = () => {
     e.preventDefault();
     try {
       await api.post("/auth/register", form);
-      alert("Registration successful! Please login.");
+      toast.success("Registration successful! Please login.");
       navigate("/login");
     } catch (err) {
       console.error(err);
-      alert(err?.response?.data?.message || "Registration failed");
+      toast.error(err?.response?.data?.message || "Registration failed");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden">
+
+      {/* Abstract blurred shapes */}
+      <div className="absolute -top-32 -left-28 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-animatePulse"></div>
+      <div className="absolute bottom-24 right-16 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-animatePulse animation-delay-1000"></div>
+
       <form
         onSubmit={handleRegister}
-        className="bg-white p-6 rounded shadow-md w-96 space-y-4"
+        className="relative z-10 bg-white bg-opacity-90 backdrop-blur-md rounded-3xl p-10 w-96 max-w-full shadow-xl space-y-6"
       >
-        <h2 className="text-2xl font-semibold text-center">Register</h2>
+        <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-4">
+          Register
+        </h2>
 
         <input
           name="name"
@@ -42,7 +50,8 @@ const Register = () => {
           value={form.name}
           onChange={handleChange}
           required
-          className="w-full p-2 border rounded"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
+          autoComplete="name"
         />
 
         <input
@@ -52,7 +61,8 @@ const Register = () => {
           value={form.email}
           onChange={handleChange}
           required
-          className="w-full p-2 border rounded"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
+          autoComplete="email"
         />
 
         <input
@@ -62,16 +72,20 @@ const Register = () => {
           value={form.password}
           onChange={handleChange}
           required
-          className="w-full p-2 border rounded"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
+          autoComplete="new-password"
         />
 
-        <button className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">
+        <button
+          type="submit"
+          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-lg transition"
+        >
           Register
         </button>
 
-        <p className="text-center text-sm">
+        <p className="text-center text-gray-600 text-sm">
           Already have an account?{" "}
-          <a href="/login" className="text-blue-500 hover:underline">
+          <a href="/login" className="text-purple-600 hover:underline font-semibold">
             Login
           </a>
         </p>
