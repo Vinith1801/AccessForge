@@ -3,6 +3,7 @@ import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import UserManagement from "../components/UserManagement";
 import ProfileCard from "../components/ProfileCard";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
   const { user, logout, updateUser } = useAuth();
@@ -12,8 +13,10 @@ const Dashboard = () => {
     try {
       const { data } = await api.get("/users");
       setUsers(data);
+      toast.success("Users fetched successfully!");
     } catch (err) {
       console.error("Error fetching users:", err);
+      toast.error("Failed to load users");
     }
   };
 

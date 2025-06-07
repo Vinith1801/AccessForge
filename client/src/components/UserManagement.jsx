@@ -3,6 +3,7 @@ import UserFormModal from "./modals/UserFormModal";
 import ConfirmDeleteModal from "./modals/ConfirmDeleteModal";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const UserManagement = ({ users, onRefresh }) => {
   const { user: currentUser } = useAuth();
@@ -23,10 +24,12 @@ const UserManagement = ({ users, onRefresh }) => {
   const submitEdit = async (updatedData) => {
     try {
       await api.put(`/users/${selectedUser._id}`, updatedData);
+      toast.success("User updated successfully!");
       setEditModalOpen(false);
       onRefresh();
     } catch (err) {
       console.error("Error updating user:", err);
+      toast.error("Failed to update user");
       alert("Edit failed");
     }
   };
@@ -34,10 +37,13 @@ const UserManagement = ({ users, onRefresh }) => {
   const confirmDelete = async () => {
     try {
       await api.delete(`/users/${selectedUser._id}`);
+      toast.success("User deleted successfully!");
       setDeleteModalOpen(false);
       onRefresh();
     } catch (err) {
       alert("Delete failed");
+      console.error("Error deleting user:", err);
+      toast.error("Failed to delete user");
     }
   };
 
