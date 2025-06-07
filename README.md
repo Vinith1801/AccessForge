@@ -137,16 +137,12 @@ router.get("/", authMiddleware, roleMiddleware(["admin", "editor"]), getAllUsers
 
 ---
 
-## 🖼️ Screenshots (Optional)
-
-> *Add UI screenshots of Login, Dashboard, User Management, etc.*
+## 🖼️ Screenshots
 
 ---
 
 ## 👨‍💻 Author
 
 Developed by **VinithBylapudi**
-
-```
 
 ---
