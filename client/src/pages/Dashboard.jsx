@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 const Dashboard = () => {
   const { user, logout, updateUser } = useAuth();
   const [users, setUsers] = useState([]);
+  const [showProfile, setShowProfile] = useState(false);
 
   const fetchUsers = async () => {
     try {
@@ -22,7 +23,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (user?.role !== "user") fetchUsers();
-  }, []);
+  }, [user]);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden p-6">
@@ -62,8 +63,20 @@ const Dashboard = () => {
                 : "You can view and edit users (except Admins)."}
             </p>
 
-            <UserTable users={users} />
+            {/* <UserTable users={users} /> */}
             <div className="mt-6">
+              <button
+  onClick={() => setShowProfile(!showProfile)}
+  className="mt-4 sm:mt-0 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-semibold shadow-md ml-4"
+>
+  {showProfile ? "Hide Profile" : "View Profile"}
+</button>
+
+{showProfile && (
+  <ProfileCard user={user} onUpdate={updateUser} />
+)}
+
+              {/* <ProfileCard user={user} onUpdate={updateUser} /> */}
               <UserManagement users={users} currentUser={user} onRefresh={fetchUsers} />
             </div>
           </section>
@@ -77,8 +90,18 @@ const Dashboard = () => {
             <p className="text-gray-600 mb-6">
               You can view and update your own profile.
             </p>
+                        <button
+  onClick={() => setShowProfile(!showProfile)}
+  className="mt-4 sm:mt-0 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-semibold shadow-md ml-4"
+>
+  {showProfile ? "Hide Profile" : "View Profile"}
+</button>
 
-            <ProfileCard user={user} onUpdate={updateUser} />
+{showProfile && (
+  <ProfileCard user={user} onUpdate={updateUser} />
+)}
+
+            {/* <ProfileCard user={user} onUpdate={updateUser} /> */}
           </section>
         )}
       </div>
