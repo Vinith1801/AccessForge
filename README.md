@@ -1,194 +1,152 @@
-# AccessForge
-AccessForge is a MERN stack-based User Access Management System featuring secure JWT authentication, role-based access control (RBAC), and an admin dashboard. Easily manage users, roles, and permissions with a scalable backend and protected React frontend. Ideal for modern web apps.
-Absolutely! Here's a detailed and professional **README section** explaining the **backend** for your project **AccessForge** — suitable to add in your `README.md` file on GitHub.
+# 🔐 AccessForge
 
-## 🛠️ Backend – AccessForge
-
-The backend of **AccessForge** is a powerful, secure, and scalable **Node.js + Express.js API** built with the following key features:
-
-* **JWT-based Authentication**
-* **Role-Based Access Control (RBAC)**
-* **Permission Management**
-* **GitHub OAuth Integration** (optional/coming next)
-* **MongoDB/Mongoose ODM**
-* Modular MVC architecture and clean middleware layering.
+AccessForge is a MERN stack-based User Access Management System featuring secure **JWT authentication**, **role-based access control (RBAC)**, and an interactive **admin dashboard**. It allows efficient management of users, roles, and permissions in modern web applications.
 
 ---
 
-### 📁 Project Structure
+## ⚡ Features
+
+- ✅ JWT-based Authentication
+- 🔒 Role-Based Access Control (RBAC): Admin, Editor, User
+- 👤 Full User Management (CRUD)
+- 🧑‍💼 Admin Dashboard for Role Assignments
+- 🌐 RESTful API using Express & MongoDB
+- ⚛️ Protected React (Vite) Frontend with Auth Context
+- 💾 Modular & Scalable Codebase
+
+---
+
+## 🛠 Tech Stack
+
+| Layer       | Tech                         |
+|------------|------------------------------|
+| Frontend    | React (Vite), TailwindCSS    |
+| Backend     | Node.js, Express.js          |
+| Database    | MongoDB (Mongoose)           |
+| Auth        | JSON Web Tokens (JWT)        |
+
+---
+
+## 📁 Folder Structure
+
+```
+
+AccessForge
+│
+├── client/               # React + Vite frontend
+│   └── src/
+│       ├── api/          # Axios config
+│       ├── components/   # UI + Modals
+│       ├── context/      # AuthContext
+│       └── pages/        # Login, Register, Dashboard
+│
+└── server/               # Node.js backend
+    ├── config/           # MongoDB connection
+    ├── controllers/      # Logic for auth & user
+    ├── middleware/       # Auth & role checks
+    ├── models/           # User & Role schemas
+    ├── routes/           # API routes
+    └── utils/            # JWT generation
+
+````
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the Repo
 
 ```bash
-server/
-├── config/               # DB config and constants
-│   └── db.js
-├── controllers/          # All controller logic
-│   ├── authController.js
-│   ├── userController.js
-│   └── roleController.js
-├── middleware/           # Auth & permission middleware
-│   ├── authMiddleware.js
-│   └── authorize.js
-├── models/               # Mongoose models
-│   ├── User.js
-│   ├── Role.js
-│   └── Permission.js
-├── routes/               # Express routes
-│   ├── authRoutes.js
-│   ├── userRoutes.js
-│   └── roleRoutes.js
-├── utils/                # Utility functions (e.g., token generation)
-│   └── generateToken.js
-├── .env                  # Environment variables
-├── app.js                # Main Express app
-└── server.js             # Entry point
-```
+git clone https://github.com/yourusername/AccessForge.git
+cd AccessForge
+````
 
 ---
 
-### 📦 Tech Stack
-
-* **Node.js** + **Express.js** – RESTful API framework
-* **MongoDB** + **Mongoose** – NoSQL database
-* **JWT** – Token-based authentication
-* **bcryptjs** – Password hashing
-* **dotenv** – Environment variable management
-* **Cors** – Cross-Origin Resource Sharing
-* **GitHub OAuth (soon)** – For social login
-
----
-
-### 🔐 Authentication & Authorization
-
-#### ✅ JWT Auth
-
-* Login issues a **signed JWT**.
-* Protects private routes via `authMiddleware`.
-
-#### 🛂 Role-Based Access Control (RBAC)
-
-* Users are assigned **roles**, each with associated **permissions**.
-* Middleware `authorizePermission("permission_name")` checks whether a user can access a given resource.
-
----
-
-### 🧠 Models Overview
-
-#### 🧑‍💼 `User`
-
-```js
-{
-  name: String,
-  email: String,
-  password: String,
-  role: ObjectId → Role
-}
-```
-
-#### 🔑 `Role`
-
-```js
-{
-  name: String,
-  permissions: [ObjectId → Permission]
-}
-```
-
-#### 🔐 `Permission`
-
-```js
-{
-  name: String,
-  description: String
-}
-```
-
----
-
-### 🔌 API Endpoints
-
-#### 🔑 Auth Routes (`/api/auth`)
-
-* `POST /register` – Register a new user
-* `POST /login` – Login with email/password
-* `GET /me` – Get current logged-in user info
-
-#### 👥 User Management (`/api/users`)
-
-* `GET /` – List all users
-* `PUT /assign-role` – Assign role to user
-* *(All protected by `manage_users` or `manage_roles` permissions)*
-
-#### 🏷️ Role Management (`/api/roles`)
-
-* `GET /` – List all roles
-* `GET /:id` – Get one role
-* `POST /` – Create a role
-* `PUT /:id` – Update a role
-* `DELETE /:id` – Delete a role
-
-> All role routes require the `manage_roles` permission.
-
----
-
-### ⚙️ How to Run the Backend
-
-#### 1. Clone the repo and install dependencies
+### 2. Backend Setup
 
 ```bash
 cd server
 npm install
+cp .env.example .env    # Add your DB URI and JWT_SECRET
+npm run dev
 ```
 
-#### 2. Create `.env` file
+#### `.env` Example:
 
 ```env
+MONGO_URI=mongodb+srv://your_mongo_uri
+JWT_SECRET=your_secret_key
 PORT=5000
-MONGO_URI=mongodb://localhost:27017/accessforge
-JWT_SECRET=yourSecretKeyHere
 ```
 
-#### 3. Start the server
+---
+
+### 3. Frontend Setup
 
 ```bash
+cd client
+npm install
 npm run dev
 ```
 
 ---
 
-### 🧪 Seed Initial Roles & Permissions (Optional)
+## 🔌 API Overview
 
-You can run a script to insert predefined roles and permissions:
+### 🔐 Auth Routes (`/api/auth`)
 
-```bash
-node scripts/seedRoles.js
+| Route     | Method | Description            |
+| --------- | ------ | ---------------------- |
+| /register | POST   | Register new user      |
+| /login    | POST   | Authenticate & get JWT |
+
+### 👤 User Routes (`/api/users`)
+
+| Route | Method | Access Level  |
+| ----- | ------ | ------------- |
+| /     | GET    | Admin, Editor |
+| /\:id | GET    | Authenticated |
+| /\:id | PUT    | Admin, Editor |
+| /me   | PUT    | Authenticated |
+
+---
+
+## 🧠 RBAC (Roles & Access)
+
+* **Admin**: Full access to all users & role management
+* **Editor**: Can manage users (read/edit)
+* **User**: Can manage only their own profile
+
+Middleware ensures protected routes:
+
+```js
+// Example
+router.get("/", authMiddleware, roleMiddleware(["admin", "editor"]), getAllUsers);
 ```
 
 ---
 
-### 📘 Permissions Reference
+## 🔄 Auth Flow
 
-| Role      | Permissions                                                 |
-| --------- | ----------------------------------------------------------- |
-| `admin`   | `manage_users`, `manage_roles`, `view_users`, `delete_user` |
-| `manager` | `view_users`, `update_user`                                 |
-| `user`    | `view_self`, `update_self`                                  |
-
----
-
-### 🛡️ Middleware Stack
-
-* `protect` → Verifies JWT token
-* `authorizePermission("permission_name")` → Ensures user has required permission
-* Cleanly separated for flexibility and reusability.
+1. User registers or logs in
+2. Backend generates JWT with `userId`
+3. Token is stored in localStorage
+4. React Context manages auth state
+5. Protected routes block unauthorized access
 
 ---
 
-### 🚀 Future Features (Planned)
+## 🖼️ Screenshots (Optional)
 
-* 🔗 GitHub OAuth Login
-* 📊 Admin Dashboard UI
-* 🧾 Audit Logs
-* 🧩 Plugin-based Permissions
+> *Add UI screenshots of Login, Dashboard, User Management, etc.*
 
 ---
 
+## 👨‍💻 Author
+
+Developed by **VinithBylapudi**
+
+```
+
+---
