@@ -139,10 +139,27 @@ router.get("/", authMiddleware, roleMiddleware(["admin", "editor"]), getAllUsers
 
 ## 🖼️ Screenshots
 
+## 🖼️ Screenshots
+
+### 1. 🔐 Login Page
+![Login](screenshots/Login.png)
+
+### 2. 🔐 Register Page
+![Register](screenshots/Register.png)
+
+### 3. 📋 Admin Dashboard
+![Admin Dashboard](screenshots/Admin.png)
+
+### 4. 🧑‍💼 User Dashboard
+![User Management](screenshots/User.png)
+
+### 5. 🧑‍💼 Editor Dashboard
+![Editor Dashboard](screenshots/Editor.png)
+
 ---
 
 ## 👨‍💻 Author
 
-Developed by **VinithBylapudi**
+Developed by **VinithBylapudi** **https://github.com/Vinith1801/AccessForge.git**
 
 ---
