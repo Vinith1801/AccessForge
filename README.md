@@ -139,8 +139,6 @@ router.get("/", authMiddleware, roleMiddleware(["admin", "editor"]), getAllUsers
 
 ## 🖼️ Screenshots
 
-## 🖼️ Screenshots
-
 ### 1. 🔐 Login Page
 ![Login](screenshots/Login.png)
 
