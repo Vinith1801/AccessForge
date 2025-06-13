@@ -12,7 +12,12 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "https://your-vercel-app.vercel.app", // replace with your domain
+  credentials: true
+}));
+
+
 app.use(express.json());
 
 // API routes
