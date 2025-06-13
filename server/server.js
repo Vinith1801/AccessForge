@@ -13,7 +13,11 @@ connectDB();
 
 const app = express();
 app.use(cors({
+<<<<<<< HEAD
+  origin: "https://accessforge-backend-ob7e.onrender.com/api", // replace with your domain
+=======
   origin: "https://your-vercel-app.vercel.app", // replace with your domain
+>>>>>>> 744f515 (Remove unused frontend assets and simplify CORS configuration in the server)
   credentials: true
 }));
 
@@ -23,19 +27,6 @@ app.use(express.json());
 // API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-
-// ---------- Serve Frontend in Production ----------
-const __dirnamePath = __dirname;
-
-if (process.env.NODE_ENV === "production") {
-  const clientDistPath = path.join(__dirnamePath, "..", "client", "dist");
-  app.use(express.static(clientDistPath));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(clientDistPath, "index.html"));
-  });
-}
-// --------------------------------------------------
 
 app.get("/", (req, res) => {
   res.send("API is running...");
