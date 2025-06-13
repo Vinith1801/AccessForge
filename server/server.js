@@ -37,14 +37,17 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 
 // ---------- Serve Frontend in Production ----------
-const __dirnamePath = path.resolve();
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirnamePath, "../client/dist")));
+const __dirnamePath = __dirname;
 
-  app.get("*", (req, res) =>
-    res.sendFile(path.join(__dirnamePath, "../client/dist/index.html"))
-  );
+if (process.env.NODE_ENV === "production") {
+  const clientDistPath = path.join(__dirnamePath, "../client/dist");
+  app.use(express.static(clientDistPath));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(clientDistPath, "index.html"));
+  });
 }
+
 // --------------------------------------------------
 
 app.get("/", (req, res) => {
