@@ -40,14 +40,13 @@ app.use("/api/users", userRoutes);
 const __dirnamePath = __dirname;
 
 if (process.env.NODE_ENV === "production") {
-  const clientDistPath = path.join(__dirnamePath, "../client/dist");
+  const clientDistPath = path.join(__dirnamePath, "..", "client", "dist");
   app.use(express.static(clientDistPath));
 
   app.get("*", (req, res) => {
     res.sendFile(path.join(clientDistPath, "index.html"));
   });
 }
-
 // --------------------------------------------------
 
 app.get("/", (req, res) => {
