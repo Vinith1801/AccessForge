@@ -12,7 +12,24 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors());
+const allowedOrigins = [
+  "https://access-forge.vercel.app", // your Vercel frontend
+  "http://localhost:5173",           // for local dev
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 // API routes
