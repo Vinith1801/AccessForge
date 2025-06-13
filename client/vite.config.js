@@ -7,4 +7,7 @@ export default defineConfig({
   plugins: [react(),
     taillwindcss()
   ],
+  build: {
+    outDir: 'dist',
+  },
 })
