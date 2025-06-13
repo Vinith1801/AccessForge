@@ -13,10 +13,9 @@ connectDB();
 
 const app = express();
 app.use(cors({
-  origin: "https://accessforge-backend-ob7e.onrender.com/api", // replace with your domain
+  origin: "https://access-forge.vercel.app",
   credentials: true
 }));
-
 
 app.use(express.json());
 
